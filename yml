@@ -1,0 +1,20 @@
+Resources:
+  MyAuthorizer:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      AuthorizerResultTtlInSeconds: 300
+      IdentitySource: method.request.header.Authorization
+      Name: token-authorizer
+      Type: TOKEN
+
+  YourApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: MyAuthorizer
+        Authorizers:
+          token-authorizer:
+            Type: COGNITO_USER_POOLS  # Adjust as needed
+            ProviderARNs:
+              - arn:aws:cognito-idp:us-east-1:123456789012:userpool/us-east-1_abcdef
